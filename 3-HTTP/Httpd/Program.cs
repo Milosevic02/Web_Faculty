@@ -92,7 +92,7 @@ namespace Httpd
                         }
                         else
                         {
-                            users.Add(new User { Username= username, Lastname = lastname });
+                            users.Add(new User { Username= username,Name = name, Lastname = lastname });
                             sw.Write($"<h1>Successfully added: {username}</h1>");
                             sw.WriteLine(GetAllUsers());
                         }
@@ -100,6 +100,64 @@ namespace Httpd
                     sw.WriteLine("<a href=\"/index.html\">Home</a>");
                     sw.WriteLine("</body></html>");
 
+                }
+                else if (resource.Contains("find?username="))
+                {
+                    string responseText = "HTTP/1.0 200 OK\r\n\r\n";
+                    sw.Write(responseText);
+                    sw.Write("<html><body>");
+
+                    string[] user = resource.Split(new string[] {"username="}, StringSplitOptions.None);
+                    var username = GetPropertyValue(user[1]);
+
+                    if (String.IsNullOrEmpty(username))
+                    {
+                        sw.WriteLine(GetAllUsers());
+                    }
+                    else
+                    {
+                        if(users.Contains(new User { Username = username }))
+                        {
+                            User findUser = users.Find(u => u.Equals(username));
+                            sw.Write($"<h1>User with:{username} exists.</h1>");
+                            sw.Write($"<p>Username:{findUser.Username} Name: {findUser.Name} Lastname:{findUser.Lastname}.</p>");
+                        }
+                        else
+                        {
+                            sw.Write($"<h1>User with:{username} does not exist.</h1>");
+                        }
+                        sw.WriteLine("<a href=\"/index.html\">Home</a>");
+                        sw.WriteLine("</body></html>");
+                    }
+                }
+                else if (resource.Contains("delete?username="))
+                {
+                    string responseText = "HTTP/1.0 200 OK\r\n\r\n";
+                    sw.Write(responseText);
+                    sw.Write("<html><body>");
+
+                    string[] user = resource.Split(new string[] { "username=" }, StringSplitOptions.None);
+                    var username = GetPropertyValue(user[1]);
+
+                    if (String.IsNullOrEmpty(username))
+                    {
+                        sw.WriteLine(GetAllUsers());
+                    }
+                    else
+                    {
+                        if (users.Contains(new User { Username = username }))
+                        {
+                            users.RemoveAll(u => u.Equals(username));
+                            sw.Write($"<h1>User {username} removed.</h1>");
+                        }
+                        else
+                        {
+                            sw.Write($"<h1>User with:{username} does not exist.</h1>");
+                        }
+                    }
+
+                    sw.WriteLine("<a href=\"/index.html\">Home</a>");
+                    sw.WriteLine("</body></html>");
                 }
                 else
                 {
