@@ -84,6 +84,10 @@ namespace Httpd
                     {
                         sw.WriteLine(GetAllUsers());
                     }
+                    else
+                    {
+                        if
+                    }
                     
                 }
                 else
@@ -105,6 +109,24 @@ namespace Httpd
             var newField = field.Split('&')[0];
             newField = Uri.UnescapeDataString(newField);
             return newField;
+        }
+
+        private static string GetAllUsers()
+        {
+            string result = "<ol>";
+
+            if(users.Count ==  0)
+            {
+                result = "<h3> List is empty! </h3>";
+                return result;
+            }
+            foreach(User user in users)
+            {
+                result += "<li>" + user.Username + "</li>\n";
+            }
+
+            result += "</ol>";
+            return result;
         }
 
         private static string GetResource(StreamReader sr)
