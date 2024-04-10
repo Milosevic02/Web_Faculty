@@ -86,9 +86,20 @@ namespace Httpd
                     }
                     else
                     {
-                        if
+                        if(users.Contains(new User { Username = username }))
+                        {
+                            sw.Write($"<h1>User with:{username} already exists.</h1>");
+                        }
+                        else
+                        {
+                            users.Add(new User { Username= username, Lastname = lastname });
+                            sw.Write($"<h1>Successfully added: {username}</h1>");
+                            sw.WriteLine(GetAllUsers());
+                        }
                     }
-                    
+                    sw.WriteLine("<a href=\"/index.html\">Home</a>");
+                    sw.WriteLine("</body></html>");
+
                 }
                 else
                 {
@@ -191,10 +202,7 @@ namespace Httpd
 
         public static int Main(String[] args)
         {
-            string neki = GetPropertyValue("username&opetnesto");
-            Console.WriteLine(neki);
-            Console.ReadKey();
-            //StartListening();
+            StartListening();
             return 0;
         }
     }
