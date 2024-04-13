@@ -101,6 +101,42 @@ namespace Httpd
                     sw.WriteLine("</body></html>");
 
                 }
+                else if (resource.Contains("edit?username="))
+                {
+                    string responseText = "HTTP/1.0 200 OK\r\n\r\n";
+                    sw.Write(responseText);
+                    sw.Write("<html><body>");
+
+                    string[] user = resource.Split(new string[] { "username=", "name=", "lastname=" }, StringSplitOptions.None);
+                    var username = GetPropertyValue(user[1]);
+                    var name = GetPropertyValue(user[2]);
+                    var lastname = GetPropertyValue(user[3]);
+                    if (String.IsNullOrEmpty(username))
+                    {
+                        sw.WriteLine(GetAllUsers());
+                    }
+                    else
+                    {
+                        bool exists = false;
+                        foreach(User u in users)
+                        {
+                            if(u.Username == username)
+                            {
+                                u.Name = name;
+                                u.Lastname = lastname;
+                                exists = true;
+                                sw.Write($"<h1>Successfully edited: {username}</h1>");
+                                sw.WriteLine(GetAllUsers());
+                            }
+                        }
+                        if (!exists)
+                        {
+                            sw.Write($"<h1>User with:{username} does not exists.</h1>");
+                        }
+                    }
+                    sw.WriteLine("<a href=\"/index.html\">Home</a>");
+                    sw.WriteLine("</body></html>");
+                }
                 else if (resource.Contains("find?username="))
                 {
                     string responseText = "HTTP/1.0 200 OK\r\n\r\n";
@@ -159,6 +195,7 @@ namespace Httpd
                     sw.WriteLine("<a href=\"/index.html\">Home</a>");
                     sw.WriteLine("</body></html>");
                 }
+            
                 else
                 {
                     SendResponse(resource, socket, sw);
