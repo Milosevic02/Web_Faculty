@@ -67,37 +67,60 @@ namespace Httpd
                 Console.WriteLine("Request from " + socket.RemoteEndPoint + ": "
                         + resource + "\n");
 
-                if (resource.Contains("add?username="))
+                if (resource.Contains("add?name="))
                 {
-                    string[] user = resource.Split(new string[] { "username=", "name=", "lastname=" }, StringSplitOptions.None);
+                    string[] club = resource.Split(new string[] {"name=", "cities=","active=" }, StringSplitOptions.None);
                     string responseText = "HTTP/1.0 200 OK\r\n\r\n";
                     sw.Write(responseText);
 
-                    var username = GetPropertyValue(user[1]);
-                    var name = GetPropertyValue(user[2]);
-                    var lastname = GetPropertyValue(user[3]);
-
-                    Console.WriteLine($"Found username: {username}, Name: {name}, Lastname: {lastname}");
+                    var name = GetPropertyValue(club[1]);
+                    var cities = GetPropertyValue(club[2]);
+                    var activeStr = "off";
+                    try
+                    {
+                           activeStr = GetPropertyValue(club[3]);
+                    }catch(Exception e) { }
+                    bool active = false;
+                    
+                    if(activeStr == "on")
+                    {
+                        active = true;
+                    }
 
                     sw.Write("<html><body>");
-                    if (String.IsNullOrEmpty(username))
+                    if (String.IsNullOrEmpty(name))
                     {
-                        sw.WriteLine(GetAllUsers());
+                        sw.WriteLine(GetAllClubs());
                     }
                     else
                     {
-                        if (users.Contains(new User { Username = username }))
+                        Club tempClub = new Club(name, cities, active);
+                        if (clubs.Contains(tempClub))
                         {
-                            sw.Write($"<h1>User with:{username} already exists.</h1>");
+                            sw.Write($"<h1>User with:{name} already exists.</h1>");
+                            sw.WriteLine(GetAllClubs() );
                         }
                         else
                         {
-                            users.Add(new User { Username = username, Name = name, Lastname = lastname });
-                            sw.Write($"<h1>Successfully added: {username}</h1>");
-                            sw.WriteLine(GetAllUsers());
+                            clubs.Add(tempClub);
+                            sw.Write($"<h1 style=\"color:blue\">Table</h1>");
+                            sw.WriteLine(GetAllClubs());
                         }
                     }
-                    sw.WriteLine("<a href=\"/index.html\">Home</a>");
+                    sw.WriteLine("<a href=\"/index.html\">Add New Club</a><br/>");
+                    sw.WriteLine("<a href=\"/bestClub\">Show Best Club</a>");
+                    sw.Write($"<h1 style=\"color:blue\">Input Points</h1>");
+                    sw.WriteLine("<form accept-charset=\"UTF - 8\" action=\"http://localhost:8080/add\">");
+                    sw.WriteLine("<table><tr><td>Club </td> <td>");
+                    sw.WriteLine("<select name=\"club\">");
+                    foreach(Club c in clubs)
+                    {
+                        sw.WriteLine("<option value=\"" + c.Name + "\">" + c.Name + "</option>");
+
+                    }
+                    sw.WriteLine("<br/></select></td></tr><tr><td>Points</td><td><input type=\"number\" name=\"points\"></td>");
+                    sw.WriteLine("<tr><td></td><td><input type=\"submit\" value=\"Submit\" /></td></tr></table></form>");
+
                     sw.WriteLine("</body></html>");
                 }
                 else
@@ -123,23 +146,29 @@ namespace Httpd
             return newField;
         }
 
-        private static string GetAllUsers()
+        private static string GetAllClubs()
         {
+            int count = 1;  
+            string result = "<table border=\"1\"";
 
-            string result = "<ol>";
-
-            if (users.Count == 0)
+            if(clubs.Count == 0)
             {
-                result = "<h3> List is empty! </h3>";
+                result = "<h3>List is empty!<h3>";
                 return result;
-
             }
-            foreach (User user in users)
+            result += "tr align=\"center\">" + "<td>#</td>" + "<td>Club</td>"
+                                            + "<td>Points</td>" + "<td>Actions</td>" + "</tr>";
+            foreach(Club club in clubs)
             {
-                result += "<li>" + user.Username + "</li>\n";
+                result += "<tr align=\"center\">" + "<td>" + count++.ToString() + "</td>"
+                                 + "<td>" + club.Name + "</td>"
+                                 + "<td>" + club.Points + "</td>"
+                                 + "<td><a href=\"/edit?name=" + club.Name + "&cities=" + club.City + "&active=" + club.Active + "&points=" + club.Points + "\">Edit data</a><br/><br/></td>"
+                        + "</tr>";
             }
 
-            result += "</ol>";
+            result += "</table><br/>";
+
             return result;
         }
 
