@@ -175,18 +175,14 @@ namespace Httpd
 
                     var name = GetPropertyValue(club[1]);
                     var cities = GetPropertyValue(club[2]);
-                    var activeStr = "off";
-                    try
+                    var activeStr = "";
+                    var active = GetPropertyValue(club[3]);
+                    if (active.Equals("True"))
                     {
-                        activeStr = GetPropertyValue(club[3]);
+                        activeStr = "checked";
                     }
-                    catch (Exception e) { }
-                    bool active = false;
                     var points = GetPropertyValue(club[4]);
-                    if (activeStr == "on")
-                    {
-                        active = true;
-                    }
+                   
 
                     sw.Write("<html><body>");
                     var index = 0;
@@ -201,12 +197,31 @@ namespace Httpd
 
                     clubs.RemoveAt(index);
                     sw.WriteLine("<h1 style=\"color:green\">Edit Data</h1>");
-                    sw.WriteLine("<form accept-charset=\"UTF-8\" action=\"http://localhost:8080/add\"><table><tr><td>Naziv:</td>" +
-                        "<td><input value=\"" + naziv + "\" type=\"text\" name=\"naziv\"></td></tr><tr><td>Grad:</td><td><select value=\"" + grad + "\" name=\"gradovi\"><option value=\"Novi Sad\">Novi Sad</option>" +
-                        "<option value=\"Beograd\">Beograd</option><option value=\"Nis\">Nis</option></select></td></tr><tr><td>Aktivan:</td><td><input " + check + " type=\"checkbox\" name=\"aktivan\"></td>" +
-                        "</tr><tr><td></td><td><input type=\"submit\" value=\"Izmeni\" /></td></tr></table></form>");
+                    sw.WriteLine("<form accept-charset=\"UTF-8\" action=\"http://localhost:8080/add\"><table><tr><td>Name:</td>" +
+                        "<td><input value=\"" + name + "\" type=\"text\" name=\"name\"></td></tr><tr><td>City:</td><td><select value=\"" + cities + "\" name=\"cities\"><option value=\"Novi Sad\">Novi Sad</option>" +
+                        "<option value=\"Beograd\">Beograd</option><option value=\"Nis\">Nis</option></select></td></tr><tr><td>Active:</td><td><input " + activeStr + " type=\"checkbox\" name=\"active\"></td>" +
+                        "</tr><tr><td></td><td><input type=\"submit\" value=\"Edit\" /></td></tr></table></form>");
+                    sw.WriteLine("</body></html>");
 
 
+                }
+                else if (resource.Contains("bestClub"))
+                {
+                    string responseText = "HTTP/1.0 200 OK\r\n\r\n";
+                    sw.Write(responseText);
+                    var maxPoints = -1;
+                    var bestClub = "Empty";
+                    foreach(Club c in clubs)
+                    {
+                        if(maxPoints < c.Points)
+                        {
+                            maxPoints = c.Points;
+                            bestClub = c.Name;
+                        }
+                    }
+                    sw.WriteLine("<html><body>");
+                    sw.WriteLine("<p>Best Club: <b>" + bestClub + "</b></p>");
+                    sw.WriteLine("</body></html>");
                 }
                 else
                 {
