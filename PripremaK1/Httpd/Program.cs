@@ -69,7 +69,7 @@ namespace Httpd
 
                 if (resource.Contains("add?name="))
                 {
-                    string[] club = resource.Split(new string[] {"name=", "cities=","active=" }, StringSplitOptions.None);
+                    string[] club = resource.Split(new string[] { "name=", "cities=", "active=" }, StringSplitOptions.None);
                     string responseText = "HTTP/1.0 200 OK\r\n\r\n";
                     sw.Write(responseText);
 
@@ -78,11 +78,12 @@ namespace Httpd
                     var activeStr = "off";
                     try
                     {
-                           activeStr = GetPropertyValue(club[3]);
-                    }catch(Exception e) { }
+                        activeStr = GetPropertyValue(club[3]);
+                    }
+                    catch (Exception e) { }
                     bool active = false;
-                    
-                    if(activeStr == "on")
+
+                    if (activeStr == "on")
                     {
                         active = true;
                     }
@@ -98,7 +99,7 @@ namespace Httpd
                         if (clubs.Contains(tempClub))
                         {
                             sw.Write($"<h1>User with:{name} already exists.</h1>");
-                            sw.WriteLine(GetAllClubs() );
+                            sw.WriteLine(GetAllClubs());
                         }
                         else
                         {
@@ -113,7 +114,7 @@ namespace Httpd
                     sw.WriteLine("<form accept-charset=\"UTF - 8\" action=\"http://localhost:8080/add\">");
                     sw.WriteLine("<table><tr><td>Club </td> <td>");
                     sw.WriteLine("<select name=\"club\">");
-                    foreach(Club c in clubs)
+                    foreach (Club c in clubs)
                     {
                         sw.WriteLine("<option value=\"" + c.Name + "\">" + c.Name + "</option>");
 
@@ -122,6 +123,90 @@ namespace Httpd
                     sw.WriteLine("<tr><td></td><td><input type=\"submit\" value=\"Submit\" /></td></tr></table></form>");
 
                     sw.WriteLine("</body></html>");
+                }
+                else if (resource.Contains("add?club="))
+                {
+                    string[] club = resource.Split(new string[] { "club=", "points=" }, StringSplitOptions.None);
+                    string responseText = "HTTP/1.0 200 OK\r\n\r\n";
+                    sw.Write(responseText);
+
+                    var name = GetPropertyValue(club[1]);
+                    var points = GetPropertyValue(club[2]);
+                    sw.Write("<html><body>");
+                    if (String.IsNullOrEmpty(name))
+                    {
+                        sw.WriteLine(GetAllClubs());
+                    }
+                    else
+                    {
+                        foreach (Club c in clubs)
+                        {
+                            if (c.Name == name)
+                            {
+                                c.Points = Int32.Parse(points);
+                                sw.WriteLine("Successfully added points");
+                                break;
+                            }
+                        }
+                    }
+                    sw.WriteLine(GetAllClubs());
+
+                    sw.WriteLine("<a href=\"/index.html\">Add New Club</a><br/>");
+                    sw.WriteLine("<a href=\"/bestClub\">Show Best Club</a>");
+                    sw.Write($"<h1 style=\"color:blue\">Input Points</h1>");
+                    sw.WriteLine("<form accept-charset=\"UTF - 8\" action=\"http://localhost:8080/add\">");
+                    sw.WriteLine("<table><tr><td>Club </td> <td>");
+                    sw.WriteLine("<select name=\"club\">");
+                    foreach (Club c in clubs)
+                    {
+                        sw.WriteLine("<option value=\"" + c.Name + "\">" + c.Name + "</option>");
+
+                    }
+                    sw.WriteLine("<br/></select></td></tr><tr><td>Points</td><td><input type=\"number\" name=\"points\"></td>");
+                    sw.WriteLine("<tr><td></td><td><input type=\"submit\" value=\"Submit\" /></td></tr></table></form>");
+
+                    sw.WriteLine("</body></html>");
+                }
+                else if (resource.Contains("edit?"))
+                {
+                    string[] club = resource.Split(new string[] { "name=", "cities=", "active=", "points" }, StringSplitOptions.None);
+                    string responseText = "HTTP/1.0 200 OK\r\n\r\n";
+                    sw.Write(responseText);
+
+                    var name = GetPropertyValue(club[1]);
+                    var cities = GetPropertyValue(club[2]);
+                    var activeStr = "off";
+                    try
+                    {
+                        activeStr = GetPropertyValue(club[3]);
+                    }
+                    catch (Exception e) { }
+                    bool active = false;
+                    var points = GetPropertyValue(club[4]);
+                    if (activeStr == "on")
+                    {
+                        active = true;
+                    }
+
+                    sw.Write("<html><body>");
+                    var index = 0;
+                    foreach (Club c in clubs)
+                    {
+                        if (c.Name.Equals(name))
+                        {
+                            break;
+                        }
+                        index++;
+                    }
+
+                    clubs.RemoveAt(index);
+                    sw.WriteLine("<h1 style=\"color:green\">Edit Data</h1>");
+                    sw.WriteLine("<form accept-charset=\"UTF-8\" action=\"http://localhost:8080/add\"><table><tr><td>Naziv:</td>" +
+                        "<td><input value=\"" + naziv + "\" type=\"text\" name=\"naziv\"></td></tr><tr><td>Grad:</td><td><select value=\"" + grad + "\" name=\"gradovi\"><option value=\"Novi Sad\">Novi Sad</option>" +
+                        "<option value=\"Beograd\">Beograd</option><option value=\"Nis\">Nis</option></select></td></tr><tr><td>Aktivan:</td><td><input " + check + " type=\"checkbox\" name=\"aktivan\"></td>" +
+                        "</tr><tr><td></td><td><input type=\"submit\" value=\"Izmeni\" /></td></tr></table></form>");
+
+
                 }
                 else
                 {
