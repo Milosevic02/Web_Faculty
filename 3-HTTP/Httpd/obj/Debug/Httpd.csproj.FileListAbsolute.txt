@@ -1,7 +1,0 @@
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\bin\Debug\Httpd.exe.config
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\bin\Debug\Httpd.exe
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\bin\Debug\Httpd.pdb
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\obj\Debug\Httpd.csproj.AssemblyReference.cache
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\obj\Debug\Httpd.csproj.CoreCompileInputs.cache
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\obj\Debug\Httpd.exe
-C:\Users\milos\Documents\Faculty\6. Semestar\Web\Zadaci\3-HTTP\Httpd\obj\Debug\Httpd.pdb
