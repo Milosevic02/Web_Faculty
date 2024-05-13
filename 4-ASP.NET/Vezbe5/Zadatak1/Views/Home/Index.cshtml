@@ -9,8 +9,37 @@
 
 <h2>List all Users</h2>
 
+<form action="/Users/SearchByRole">
+    <input list="roles" name="role" />
+    <datalist id="roles">
+        <option value="ADMINISTRATOR"></option>
+        <option value="MODERATOR"></option>
+        <option value="GUEST"></option>
+    </datalist>
+    <input type="submit" value="Search by role" />
+</form>
 
-<a href="~/Users/">Show all users!</a>
+<table class="table">
+    <tr>
+        <th>Users</th>
+    </tr>
+
+@foreach(var item in ViewBag.users)
+            {
+                <tr>
+                    <td>
+                        @item.Username
+                    </td>
+                    <td>
+                        @item.Role
+                    </td>
+                    <td>
+                        <a href="/Users/Delete?username=@item.Username">Delete</a>
+                    </td>
+                </tr>
+            }
+</table>
+
 
 
 
