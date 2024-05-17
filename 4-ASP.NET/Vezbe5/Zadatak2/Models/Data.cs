@@ -18,7 +18,7 @@ namespace Zadatak2.Models
             string line = "";
             while((line = sr.ReadLine()) != null)
             {
-                string[] tokens = line.Split(";");
+                string[] tokens = line.Split(';');
                 Product p = new Product(tokens[0], tokens[1], double.Parse(tokens[2]));
                 products.Add(p);
             }
