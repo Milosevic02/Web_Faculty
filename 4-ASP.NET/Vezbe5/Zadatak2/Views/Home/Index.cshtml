@@ -4,5 +4,24 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Web Shop</h2>
 
+<p>Welcome @ViewBag.User.Username</p>
+
+<table>
+    <tr><th>Shooping list</th></tr>
+    @foreach (Product item in Model)
+    {
+        <tr>
+            <td>@item.name</td>
+            <td>@item.price</td>
+            <td>
+                <form method="post" action="~/Cart/Add">
+                    <input type="text" name="productId" value="@item.id" hidden />
+                    <input type="submit" value="Add" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+<a href="~/Cart/Index">Cart</a>
