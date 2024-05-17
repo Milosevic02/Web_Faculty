@@ -48,5 +48,18 @@ namespace Zadatak2.Models
             return users;
 
         }
+
+        public static void SaveUser(User user)
+        {
+            string path = "~/App_Data/users.txt";
+            path = HostingEnvironment.MapPath(path);
+            using (FileStream stream = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                sw.WriteLine($"{user.Username};{user.Password};{user.Role};{user.Age}");
+            }
+            
+
+        }
     }
 }
