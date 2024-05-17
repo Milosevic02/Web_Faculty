@@ -14,7 +14,7 @@ namespace Zadatak2.Controllers
         {
             User user = (User)Session["user"];
             if(user == null || user.Username.Equals("") ) {
-                return RedirectToAction("Index", "Authetication");
+                return RedirectToAction("Index", "Authentication");
             }
             Dictionary<Product, Int32> cart = (Dictionary<Product, Int32>)Session["cart"];
             if(cart == null )
