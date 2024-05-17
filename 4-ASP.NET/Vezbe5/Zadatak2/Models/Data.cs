@@ -31,6 +31,22 @@ namespace Zadatak2.Models
         public static List<User>ReadUsers(string path)
         {
             List<User> users = new List<User>();
+            path = HostingEnvironment.MapPath(path);
+            FileStream stream = new FileStream(path,FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+            while((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+                User u = new User(tokens[0], tokens[1], (UserType)Enum.Parse(typeof(UserType),tokens[2]),int.Parse(tokens[3]));
+                users.Add(u);
+            }   
+
+            sr.Close();
+            stream.Close();
+
+            return users;
+
         }
     }
 }
