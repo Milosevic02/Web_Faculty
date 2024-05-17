@@ -12,13 +12,39 @@ namespace Zadatak1.Controllers
         // GET: Users
         public ActionResult Index()
         {
-            List<User> users = new List<User>();
-            users.Add(new User
+   
+            return View();
+        }
+
+        public ActionResult Delete(string username)
+        {
+            Dictionary<string, User> users = (Dictionary<string, User>)HttpContext.Application["users"];
+            users.Remove(username);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult SearchByRole(string role)
+        {
+            Dictionary<string, User> users = (Dictionary<string, User>)HttpContext.Application["users"];
+            List<User> usersFilter = new List<User>();
+
+            if (role.Equals(""))
             {
-                Username = "pera",
-                Password = "pera"
-            });
-            return View(users);
+                ViewBag.users = users.Values;
+            }
+            else
+            {
+                foreach (var user in users.Values)
+                {
+                    if (user.Role.ToString().Equals(role))
+                    {
+                        usersFilter.Add(user);
+                    }
+                }
+                ViewBag.users = usersFilter;
+            }
+
+            return View("~/Views/Home/Index.cshtml");
         }
     }
 }
