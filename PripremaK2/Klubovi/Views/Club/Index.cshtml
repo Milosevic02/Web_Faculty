@@ -3,5 +3,72 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Table</h2>
+
+@if (ViewBag.clubs.Count == 0)
+{
+    <h3>List is empty!</h3>
+}
+else
+{
+    <table border="1">
+        <tr>
+            <th>Club</th>
+            <th>Points</th>
+            <th>Actions</th>
+        </tr>
+
+        @foreach (var item in ViewBag.clubs)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Points</td>
+                <td><a href="/Club/Edit?name=@item.Name">Edit</a></td>
+            </tr>
+        }
+    </table>
+}
+
+
+
+<a href="~/Home"></a>
+<a href="~/Club/BestClub"></a>
+
+<h2>Input Points</h2>
+@if (ViewBag.clubs.Count == 0)
+{
+    <h3>List is empty!</h3>
+}
+else
+{
+    <form action="/Club/Points" method="post">
+        <table>
+            <tr>
+                <td>Club:</td>
+                <td>
+                    <select name="club">
+                        @foreach (var item in ViewBag.clubs)
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Points:</td>
+                <td><input type="text" name="point" /></td>
+
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+
+    </form>
+}
+
+
+
 
