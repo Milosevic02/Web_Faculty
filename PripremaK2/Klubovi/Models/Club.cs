@@ -7,23 +7,25 @@ namespace Klubovi.Models
 {
     public class Club
     {
-        private string name;
-        private string city;
-        private bool active;
-        private int points;
+        public string Name { get; set; }
+        public string City { get; set; }
+        public bool Active { get; set; }
+        public int Points { get; set; }
+
+        public Club() {
+            Name = "";
+            City = "";
+            Active = false;
+            Points = 0;
+        }
 
         public Club(string name, string city, bool active)
         {
-            this.name = name;
-            this.city = city;
-            this.active = active;
-            this.points = 0;
+            Name = name;
+            City = city;
+            Active = active;
+            Points = 0;
         }
-
-        public string Name { get => name; set => name = value; }
-        public string City { get => city; set => city = value; }
-        public bool Active { get => active; set => active = value; }
-        public int Points { get => points; set => points = value; }
 
         public override bool Equals(object obj)
         {
