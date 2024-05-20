@@ -1,3 +1,4 @@
+using Klubovi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace Klubovi
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            HttpContext.Current.Application["clubs"] = new Dictionary<string, Club>();
+
         }
     }
 }
